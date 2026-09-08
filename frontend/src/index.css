@@ -1,0 +1,57 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap');
+@import "tailwindcss";
+
+/* ── Hope World Brand Theme ── */
+@theme {
+  --color-brand-navy: #24334A;
+  --color-brand-pink: #FF5E7E;
+  --color-brand-yellow: #FFD13B;
+  --color-brand-blue: #38B6FF;
+  --color-brand-navy-light: #3a4f6a;
+
+  --color-bg-page: #f0f4f8;
+  --color-bg-card: #ffffff;
+  --color-bg-header: #ffffff;
+  --color-bg-footer: #f8fafc;
+
+  --color-text-primary: #24334A;
+  --color-text-secondary: #64748b;
+  --color-text-muted: #94a3b8;
+
+  --color-border-light: #e2e8f0;
+  --color-border-card: #dbeafe;
+
+  --shadow-card: 0 4px 24px rgba(56, 182, 255, 0.10), 0 1.5px 6px rgba(36, 51, 74, 0.06);
+  --shadow-soft: 0 2px 12px rgba(36, 51, 74, 0.08);
+  --shadow-glow-blue: 0 0 20px rgba(56, 182, 255, 0.35);
+  --shadow-glow-yellow: 0 0 20px rgba(255, 209, 59, 0.35);
+
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --radius-xl: 28px;
+
+  --font-family-brand: 'Outfit', system-ui, sans-serif;
+}
+
+/* ── Base Reset ── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-family-brand);
+  background: var(--color-bg-page);
+  color: var(--color-text-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#root {
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+}
