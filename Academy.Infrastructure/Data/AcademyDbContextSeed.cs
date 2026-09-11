@@ -6,10 +6,39 @@ public static class AcademyDbContextSeed
 {
     public static async Task SeedAsync(AcademyDbContext context)
     {
+        Island academicIsland;
+        if (!context.Islands.Any())
+        {
+            academicIsland = new Island
+            {
+                Name = "Academic Island",
+                Description = "Main academic category containing core subjects such as Arabic and English.",
+                IsActive = true,
+                CreatedAt = DateTime.UtcNow
+            };
+            context.Islands.Add(academicIsland);
+            await context.SaveChangesAsync();
+        }
+        else
+        {
+            academicIsland = context.Islands.First();
+        }
+
+        // Link existing subjects without island to academicIsland
+        var existingUnlinkedSubjects = context.Subjects.Where(s => s.IslandId == null).ToList();
+        if (existingUnlinkedSubjects.Any())
+        {
+            foreach (var subject in existingUnlinkedSubjects)
+            {
+                subject.IslandId = academicIsland.IslandId;
+            }
+            await context.SaveChangesAsync();
+        }
+
         if (context.Subjects.Any()) return;
 
-        var arabic = new Subject { Code = "AR", Name = "Arabic", IsActive = true };
-        var english = new Subject { Code = "EN", Name = "English", IsActive = true };
+        var arabic = new Subject { Code = "AR", Name = "Arabic", IsActive = true, IslandId = academicIsland.IslandId };
+        var english = new Subject { Code = "EN", Name = "English", IsActive = true, IslandId = academicIsland.IslandId };
         
         context.Subjects.AddRange(arabic, english);
         await context.SaveChangesAsync();

@@ -1,9 +1,7 @@
 using Academy.Application;
-using Academy.Application.Abstractions.Authentication;
-using Academy.Application.Abstractions.Persistence;
+using Academy.Infrastructure;
 using Academy.Infrastructure.Authentication;
 using Academy.Infrastructure.Data;
-using Academy.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -48,52 +46,34 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
-// Configure DB Context
-builder.Services.AddDbContext<AcademyDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services
+    .AddApplication()
+    .AddInfrastructure(builder.Configuration);
 
-// Authentication & JWT
-var secretKey = builder.Configuration["JwtSettings:SecretKey"] ?? "SuperSecretKeyForHopeWorldAcademyApp2026!";
-var issuer = builder.Configuration["JwtSettings:Issuer"] ?? "HopeWorldAcademy";
-var audience = builder.Configuration["JwtSettings:Audience"] ?? "HopeWorldAcademyUsers";
-
-builder.Services.AddAuthentication(options =>
-{
-    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-})
-.AddJwtBearer(options =>
-{
-    options.TokenValidationParameters = new TokenValidationParameters
+builder.Services
+    .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
     {
-        ValidateIssuer = true,
-        ValidateAudience = true,
-        ValidateLifetime = true,
-        ValidateIssuerSigningKey = true,
-        ValidIssuer = issuer,
-        ValidAudience = audience,
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey))
-    };
-});
+        var jwtSettings = builder.Configuration
+            .GetSection("JwtSettings")
+            .Get<JwtSettings>();
 
-builder.Services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
 
-// Repositories
-builder.Services.AddScoped<IClassRepository, ClassRepository>();
-builder.Services.AddScoped<IStudentRepository, StudentRepository>();
-builder.Services.AddScoped<IInstructorRepository, InstructorRepository>();
-builder.Services.AddScoped<ISubjectRepository, SubjectRepository>();
-builder.Services.AddScoped<ILevelRepository, LevelRepository>();
-builder.Services.AddScoped<ITutorialRepository, TutorialRepository>();
-builder.Services.AddScoped<IQuizRepository, QuizRepository>();
-builder.Services.AddScoped<IQuestionRepository, QuestionRepository>();
-builder.Services.AddScoped<IQuizAttemptRepository, QuizAttemptRepository>();
-builder.Services.AddScoped<IStudentProgressRepository, StudentProgressRepository>();
-builder.Services.AddScoped<IClassProgressRepository, ClassProgressRepository>();
-builder.Services.AddScoped<ITeachRepository, TeachRepository>();
+            ValidIssuer = jwtSettings!.Issuer,
+            ValidAudience = jwtSettings.Audience,
 
-// MediatR
-builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(AssemblyMarker).Assembly));
+            IssuerSigningKey = new SymmetricSecurityKey(
+                Encoding.UTF8.GetBytes(jwtSettings.SecretKey))
+        };
+    });
+
+builder.Services.AddHttpContextAccessor();
 
 var app = builder.Build();
 
