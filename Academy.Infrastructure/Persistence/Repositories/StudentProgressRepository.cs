@@ -22,7 +22,19 @@ public class StudentProgressRepository : IStudentProgressRepository
 
     public async Task<IEnumerable<StudentProgress>> GetByStudentIdAsync(int studentId)
     {
-        return await _context.StudentProgresses.Where(sp => sp.StudentId == studentId).ToListAsync();
+        return await _context.StudentProgresses
+            .Include(sp => sp.Subject)
+            .Where(sp => sp.StudentId == studentId)
+            .ToListAsync();
+    }
+
+    public async Task<StudentProgress?> GetLatestProgressAsync(int studentId)
+    {
+        return await _context.StudentProgresses
+            .Include(sp => sp.Subject)
+            .Where(sp => sp.StudentId == studentId)
+            .OrderByDescending(sp => sp.UpdatedAt)
+            .FirstOrDefaultAsync();
     }
 
     public async Task AddAsync(StudentProgress entity)

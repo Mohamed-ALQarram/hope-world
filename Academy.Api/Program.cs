@@ -23,11 +23,12 @@ builder.Services.AddSwaggerGen(c =>
 {
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
-        Description = "JWT Authorization header using the Bearer scheme. Example: \"Bearer {token}\"",
+        Description = "Enter your JWT Bearer token.",
         Name = "Authorization",
         In = ParameterLocation.Header,
-        Type = SecuritySchemeType.ApiKey,
-        Scheme = "Bearer"
+        Type = SecuritySchemeType.Http,
+        Scheme = "bearer",
+        BearerFormat = "JWT"
     });
 
     c.AddSecurityRequirement(new OpenApiSecurityRequirement
@@ -51,12 +52,19 @@ builder.Services
     .AddInfrastructure(builder.Configuration);
 
 builder.Services
-    .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddAuthentication(options =>
+    {
+        options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+        options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    })
     .AddJwtBearer(options =>
     {
-        var jwtSettings = builder.Configuration
-            .GetSection("JwtSettings")
-            .Get<JwtSettings>();
+        var secretKey = builder.Configuration["JwtSettings:SecretKey"] ?? "SuperSecretKeyForHopeWorldAcademyApp2026!";
+        var issuer = builder.Configuration["JwtSettings:Issuer"] ?? "HopeWorldAcademy";
+        var audience = builder.Configuration["JwtSettings:Audience"] ?? "HopeWorldAcademyUsers";
+
+        options.RequireHttpsMetadata = false;
+        options.SaveToken = true;
 
         options.TokenValidationParameters = new TokenValidationParameters
         {
@@ -65,25 +73,41 @@ builder.Services
             ValidateLifetime = true,
             ValidateIssuerSigningKey = true,
 
-            ValidIssuer = jwtSettings!.Issuer,
-            ValidAudience = jwtSettings.Audience,
+            ValidIssuer = issuer,
+            ValidAudience = audience,
 
-            IssuerSigningKey = new SymmetricSecurityKey(
-                Encoding.UTF8.GetBytes(jwtSettings.SecretKey))
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey))
+        };
+
+        options.Events = new JwtBearerEvents
+        {
+            OnAuthenticationFailed = context =>
+            {
+                Console.WriteLine($"[JWT Error] Authentication Failed: {context.Exception.Message}");
+                return Task.CompletedTask;
+            },
+            OnChallenge = context =>
+            {
+                Console.WriteLine($"[JWT Error] OnChallenge: Error='{context.Error}', Description='{context.ErrorDescription}'");
+                return Task.CompletedTask;
+            }
         };
     });
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll", policy =>
+    {
+        policy.AllowAnyOrigin()
+              .AllowAnyMethod()
+              .AllowAnyHeader();
+    });
+});
 
 builder.Services.AddHttpContextAccessor();
 
 var app = builder.Build();
 
-// Seed Database
-using (var scope = app.Services.CreateScope())
-{
-    var context = scope.ServiceProvider.GetRequiredService<AcademyDbContext>();
-    context.Database.Migrate();
-    await AcademyDbContextSeed.SeedAsync(context);
-}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -93,6 +117,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors("AllowAll");
 
 app.UseAuthentication();
 app.UseAuthorization();
