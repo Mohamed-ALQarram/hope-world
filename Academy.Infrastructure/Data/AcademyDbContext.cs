@@ -8,6 +8,7 @@ public class AcademyDbContext : DbContext
 {
     public AcademyDbContext(DbContextOptions<AcademyDbContext> options) : base(options) { }
 
+    public DbSet<Island> Islands { get; set; } = null!;
     public DbSet<Class> Classes { get; set; } = null!;
     public DbSet<Student> Students { get; set; } = null!;
     public DbSet<Instructor> Instructors { get; set; } = null!;
