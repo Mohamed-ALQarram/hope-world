@@ -128,33 +128,6 @@ export default function ChooseStudentPage() {
               ))}
             </div>
 
-            {/* Fox mascot welcome-back message */}
-            {selectedStudent && (
-              <div className="mt-6 flex items-center gap-3 rounded-2xl border border-brand-yellow/30 bg-brand-yellow/10 p-4 shadow-soft animate-[fadeIn_0.3s_ease-out]">
-                <span className="text-3xl shrink-0" aria-hidden="true">🦊</span>
-                <div className="min-w-0 flex-1">
-                  <p className="text-sm font-bold text-brand-navy m-0">
-                    Fox Rami: &ldquo;I remember you, {selectedStudent.studentName}! Let&apos;s play 🎮&rdquo;
-                  </p>
-                  <p className="text-xs text-text-secondary mt-0.5 m-0" dir="rtl">
-                    أنا أتذكرك! هيا نلعب ونتعلم معاً 🌟
-                  </p>
-                </div>
-                <button
-                  type="button"
-                  onClick={handleLogin}
-                  disabled={loginMutation.isPending}
-                  className="shrink-0 inline-flex items-center gap-1.5 rounded-full bg-brand-blue px-4 py-2 text-xs font-bold text-white shadow-soft transition-all hover:brightness-110 cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
-                >
-                  {loginMutation.isPending ? (
-                    <Loader2 size={14} className="animate-spin" />
-                  ) : (
-                    'Ready to roll ▶'
-                  )}
-                </button>
-              </div>
-            )}
-
             {/* Login error */}
             {loginMutation.isError && (
               <div className="mt-4 text-center">

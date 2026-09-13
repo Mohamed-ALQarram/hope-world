@@ -13,7 +13,7 @@ export default function SubjectSelectionPage() {
         {/* ── Back Navigation ── */}
         <div className="pt-4 pb-2">
           <Link
-            to="/"
+            to="/world-map"
             className="inline-flex items-center gap-1.5 rounded-full border border-border-light bg-bg-card px-3.5 py-1.5 text-xs font-semibold text-brand-blue shadow-soft transition-colors hover:bg-brand-blue/5 hover:border-brand-blue/30"
           >
             <ArrowLeft size={14} />
