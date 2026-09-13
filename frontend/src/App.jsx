@@ -8,13 +8,13 @@ import CreateStudentPage from './pages/CreateStudentPage'
 function App() {
   return (
     <Routes>
-      <Route path="/" element={<WorldMapPage />} />
+      <Route path="/world-map" element={<WorldMapPage />} />
       <Route path="/academic" element={<SubjectSelectionPage />} />
       <Route path="/academic/:subjectId" element={<PlaceholderPage title="Subject" />} />
       <Route path="/computer" element={<PlaceholderPage title="Computer Island" />} />
-      <Route path="/student-entry" element={<ChooseClassPage />} />
-      <Route path="/student-entry/choose-student" element={<ChooseStudentPage />} />
-      <Route path="/student-entry/create-student" element={<CreateStudentPage />} />
+      <Route path="/" element={<ChooseClassPage />} />
+      <Route path="/choose-student" element={<ChooseStudentPage />} />
+      <Route path="/create-student" element={<CreateStudentPage />} />
     </Routes>
   )
 }

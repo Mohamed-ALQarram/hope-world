@@ -22,7 +22,7 @@ export default function ChooseClassPage() {
     const cls = classes?.find((c) => c.classId === selectedId)
     if (!cls) return
     setSelectedClass(cls)
-    navigate('/student-entry/choose-student')
+    navigate('/choose-student')
   }
 
   return (

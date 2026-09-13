@@ -19,7 +19,7 @@ export default function ChooseStudentPage() {
 
   // Guard: redirect if no class selected
   useEffect(() => {
-    if (!selectedClass) navigate('/student-entry', { replace: true })
+    if (!selectedClass) navigate('/', { replace: true })
   }, [selectedClass, navigate])
 
   const classId = selectedClass?.classId
@@ -51,7 +51,7 @@ export default function ChooseStudentPage() {
             <Sparkles size={14} />
             Class {selectedClass.className}
             <Link
-              to="/student-entry"
+              to="/"
               className="ml-2 underline text-brand-blue/70 hover:text-brand-blue transition-colors"
             >
               Change
@@ -106,7 +106,7 @@ export default function ChooseStudentPage() {
             <p className="text-text-secondary text-sm mb-4 m-0">Be the first explorer to join this class!</p>
             <button
               type="button"
-              onClick={() => navigate('/student-entry/create-student')}
+              onClick={() => navigate('/create-student')}
               className="inline-flex items-center gap-2 rounded-full bg-brand-pink px-6 py-3 text-sm font-bold text-white shadow-card transition-all hover:brightness-110 hover:shadow-lg cursor-pointer"
             >
               Create My Profile 🚀
@@ -167,7 +167,7 @@ export default function ChooseStudentPage() {
             {/* Bottom actions */}
             <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mt-8 pt-6 border-t border-border-light">
               <Link
-                to="/student-entry"
+                to="/"
                 className="inline-flex items-center gap-1.5 rounded-full border border-border-light bg-bg-card px-4 py-2 text-xs font-semibold text-brand-blue shadow-soft transition-colors hover:bg-brand-blue/5 hover:border-brand-blue/30"
               >
                 <ArrowLeft size={14} />
@@ -176,7 +176,7 @@ export default function ChooseStudentPage() {
 
               <button
                 type="button"
-                onClick={() => navigate('/student-entry/create-student')}
+                onClick={() => navigate('/create-student')}
                 className="inline-flex items-center gap-2 rounded-full border-2 border-dashed border-brand-pink/40 bg-brand-pink/5 px-5 py-2.5 text-xs sm:text-sm font-bold text-brand-pink transition-all hover:bg-brand-pink/10 hover:border-brand-pink/60 cursor-pointer"
                 id="cant-find-name"
               >

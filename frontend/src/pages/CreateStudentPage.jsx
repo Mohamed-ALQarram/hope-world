@@ -31,7 +31,7 @@ export default function CreateStudentPage() {
 
   // Guard: redirect if no class selected
   useEffect(() => {
-    if (!selectedClass) navigate('/student-entry', { replace: true })
+    if (!selectedClass) navigate('/', { replace: true })
   }, [selectedClass, navigate])
 
   const registerMutation = useStudentRegister()
@@ -215,7 +215,7 @@ export default function CreateStudentPage() {
           {/* Bottom actions */}
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mt-8 pt-6 border-t border-border-light">
             <Link
-              to="/student-entry/choose-student"
+              to="/choose-student"
               className="inline-flex items-center gap-1.5 rounded-full border border-border-light bg-bg-card px-4 py-2 text-xs font-semibold text-brand-blue shadow-soft transition-colors hover:bg-brand-blue/5 hover:border-brand-blue/30"
             >
               <ArrowLeft size={14} />

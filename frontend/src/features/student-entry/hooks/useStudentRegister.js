@@ -15,7 +15,7 @@ export function useStudentRegister() {
     mutationFn: registerStudent,
     onSuccess: (data) => {
       setAuth(data)
-      navigate('/')
+      navigate('/world-map')
     },
   })
 }

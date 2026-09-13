@@ -20,7 +20,7 @@ export default function Header() {
             <Home size={20} />
           </Link>
           <span className="text-lg sm:text-xl font-extrabold tracking-tight text-brand-navy">
-            HOPE WORLD{' '}
+            HOPE ACADEMY{' '}
             <span className="text-brand-yellow" aria-hidden="true">✦</span>
           </span>
         </div>
