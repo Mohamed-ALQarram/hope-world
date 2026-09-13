@@ -1,7 +1,12 @@
 import { Link } from 'react-router-dom'
 import { Home, Star, Volume2, User } from 'lucide-react'
+import { useStudentEntryStore } from '../features/student-entry/store/useStudentEntryStore'
+import { AVATAR_OPTIONS } from '../features/student-entry/utils/dummyVisuals'
 
 export default function Header() {
+  const avatarKey = useStudentEntryStore((s) => s.selectedAvatar)
+  const avatar = AVATAR_OPTIONS.find((a) => a.key === avatarKey)
+
   return (
     <header className="sticky top-0 z-50 bg-bg-header border-b border-border-light">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
@@ -43,7 +48,11 @@ export default function Header() {
             className="flex items-center justify-center w-10 h-10 rounded-full border-2 border-brand-yellow bg-brand-yellow/20 text-brand-navy shadow-soft overflow-hidden hover:border-brand-yellow/80 transition-colors"
             aria-label="Profile"
           >
-            <User size={18} />
+            {avatar ? (
+              <span className="text-lg leading-none" aria-hidden="true">{avatar.emoji}</span>
+            ) : (
+              <User size={18} />
+            )}
           </button>
         </div>
       </div>

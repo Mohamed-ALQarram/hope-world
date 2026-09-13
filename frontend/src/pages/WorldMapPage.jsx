@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom'
 import { Lock, Lightbulb, Headphones } from 'lucide-react'
 import Layout from '../components/Layout'
 import mapImg from '../assets/map.png'
+import { useStudentEntryStore } from '../features/student-entry/store/useStudentEntryStore'
 
 const UNLOCKED_ISLANDS = [
   {
@@ -62,6 +63,7 @@ function ProgressRing({ percent }) {
 }
 
 export default function WorldMapPage() {
+  const studentName = useStudentEntryStore((s) => s.auth?.studentName)
   const unlockedCount = UNLOCKED_ISLANDS.length
   const totalCount = UNLOCKED_ISLANDS.length + LOCKED_ISLANDS.length
   const progressPercent = Math.round((unlockedCount / totalCount) * 100)
@@ -75,7 +77,7 @@ export default function WorldMapPage() {
             <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-md bg-brand-blue px-1.5 py-px text-[0.6rem] font-bold tracking-[0.02em] text-white">Guide</span>
           </div>
           <div>
-            <h2 className="m-0 text-base leading-[1.3] font-bold text-brand-navy">Marhaban, Explorer! ✨</h2>
+            <h2 className="m-0 text-base leading-[1.3] font-bold text-brand-navy">{studentName ? `مرحباً يا ${studentName}! ✨` : 'Marhaban, Explorer! ✨'}</h2>
             <p className="mt-0.5 text-[0.8rem] leading-[1.4] text-text-secondary">
               Welcome to <span className="font-semibold text-brand-blue">Academic Island</span>!
               Choose your next learning quest below.
